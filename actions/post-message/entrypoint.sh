@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 data="{\"text\": \"${@:-1}\"}"
 
 curl -f -X POST "$WEBHOOK_URL" \

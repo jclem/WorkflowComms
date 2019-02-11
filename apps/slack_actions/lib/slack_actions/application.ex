@@ -8,6 +8,7 @@ defmodule SlackActions.Application do
   def start(_type, _args) do
     # List all child processes to be supervised
     children = [
+      {SlackActions.Callbacks, {[], [name: SlackActions.Callbacks]}}
       # Starts a worker by calling: SlackActions.Worker.start_link(arg)
       # {SlackActions.Worker, arg},
     ]
