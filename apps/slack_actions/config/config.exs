@@ -10,11 +10,11 @@ use Mix.Config
 
 # You can configure your application as:
 #
-#     config :slack_confirm, key: :value
+#     config :slack_actions, key: :value
 #
 # and access this configuration in your application as:
 #
-#     Application.get_env(:slack_confirm, :key)
+#     Application.get_env(:slack_actions, :key)
 #
 # You can also configure a 3rd-party app:
 #

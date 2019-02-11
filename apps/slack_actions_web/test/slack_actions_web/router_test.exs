@@ -1,8 +1,8 @@
-defmodule SlackConfirmWeb.RouterTest do
+defmodule SlackActionsWeb.RouterTest do
   use ExUnit.Case, async: true
   use Plug.Test
 
-  alias SlackConfirmWeb.Router
+  alias SlackActionsWeb.Router
 
   @opts Router.init([])
 

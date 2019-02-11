@@ -1,21 +1,20 @@
-# SlackConfirmWeb
+# SlackActions
 
 **TODO: Add description**
 
 ## Installation
 
 If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `slack_confirm_web` to your list of dependencies in `mix.exs`:
+by adding `slack_actions` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
   [
-    {:slack_confirm_web, "~> 0.1.0"}
+    {:slack_actions, "~> 0.1.0"}
   ]
 end
 ```
 
 Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
 and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/slack_confirm_web](https://hexdocs.pm/slack_confirm_web).
-
+be found at [https://hexdocs.pm/slack_actions](https://hexdocs.pm/slack_actions).

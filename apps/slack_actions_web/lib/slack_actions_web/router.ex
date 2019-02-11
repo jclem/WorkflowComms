@@ -1,4 +1,4 @@
-defmodule SlackConfirmWeb.Router do
+defmodule SlackActionsWeb.Router do
   @moduledoc false
 
   use Plug.Router

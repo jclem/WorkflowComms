@@ -1,4 +1,3 @@
-# SlackConfirm
+# SlackActions
 
 **TODO: Add description**
-

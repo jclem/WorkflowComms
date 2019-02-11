@@ -1,6 +1,6 @@
-defmodule SlackConfirm do
+defmodule SlackActions do
   @moduledoc """
-  Documentation for SlackConfirm.
+  Documentation for SlackActions.
   """
 
   @doc """
@@ -8,7 +8,7 @@ defmodule SlackConfirm do
 
   ## Examples
 
-      iex> SlackConfirm.hello()
+      iex> SlackActions.hello()
       :world
 
   """

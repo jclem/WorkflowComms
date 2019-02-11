@@ -1,6 +1,6 @@
 use Mix.Config
 
-config :slack_confirm_web,
+config :slack_actions_web,
   port:
     (if port = System.get_env("PORT") do
        String.to_integer(port)

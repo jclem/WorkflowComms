@@ -1,4 +1,4 @@
-defmodule SlackConfirm.Application do
+defmodule SlackActions.Application do
   # See https://hexdocs.pm/elixir/Application.html
   # for more information on OTP Applications
   @moduledoc false
@@ -8,13 +8,13 @@ defmodule SlackConfirm.Application do
   def start(_type, _args) do
     # List all child processes to be supervised
     children = [
-      # Starts a worker by calling: SlackConfirm.Worker.start_link(arg)
-      # {SlackConfirm.Worker, arg},
+      # Starts a worker by calling: SlackActions.Worker.start_link(arg)
+      # {SlackActions.Worker, arg},
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
-    opts = [strategy: :one_for_one, name: SlackConfirm.Supervisor]
+    opts = [strategy: :one_for_one, name: SlackActions.Supervisor]
     Supervisor.start_link(children, opts)
   end
 end
