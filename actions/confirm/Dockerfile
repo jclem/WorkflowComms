@@ -1,4 +1,4 @@
-FROM debian
+FROM ruby:slim
 
 LABEL "repository"="https://github.com/jclem/slack_actions"
 LABEL "homepage"="https://github.com/jclem/slack_actions/tree/master/post-message"
@@ -9,9 +9,6 @@ LABEL "com.github.actions.description"="An action for confirming continuation of
 LABEL "com.github.actions.icon"="help-circle"
 LABEL "com.github.actions.color"="blue"
 
-RUN apt-get update
-RUN apt-get install -y curl jq uuid
+COPY entrypoint.rb /entrypoint.rb
 
-COPY entrypoint.sh /entrypoint.sh
-
-ENTRYPOINT ["/entrypoint.sh"]
+ENTRYPOINT ["/entrypoint.rb"]
