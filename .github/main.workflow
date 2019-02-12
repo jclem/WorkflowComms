@@ -1,5 +1,5 @@
 workflow "Build & Release" {
-  on = "push"
+  on = "repository_dispatch"
   resolves = "Container Release"
 }
 
