@@ -27,7 +27,7 @@ poll_response() {
   done
 
   echo "Got no response, halting workflow."
-  exit 78;
+  exit 1;
 }
 
 get_response() {
