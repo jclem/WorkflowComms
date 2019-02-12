@@ -67,7 +67,7 @@ class ActionConfirmation
             },
             {
               "title": "Repository",
-              "value": ENV["GITHUB_REPOSITORY"],
+              "value": "https://github.com/#{ENV["GITHUB_REPOSITORY"]}",
               "short": true,
             },
             {
@@ -76,7 +76,7 @@ class ActionConfirmation
               "short": true,
             },
             {
-              "title": "SHA",
+              "title": "Commit",
               "value": "https://github.com/#{ENV["GITHUB_REPOSITORY"]}/commit/#{ENV["GITHUB_SHA"]}",
             },
           ],
