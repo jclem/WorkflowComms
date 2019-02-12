@@ -51,6 +51,7 @@ class ActionConfirmation
 
   private def post_message
     uri = URI("https://slack.com/api/chat.postMessage")
+    sha = ENV["GITHUB_SHA"].chomp
 
     resp = Net::HTTP.post_form(uri, {
       channel: ENV["SLACK_BOT_CHANNEL"],
@@ -77,7 +78,11 @@ class ActionConfirmation
             },
             {
               "title": "Commit",
-              "value": "https://github.com/#{ENV["GITHUB_REPOSITORY"]}/commit/#{ENV["GITHUB_SHA"]}",
+              "value": "https://github.com/#{ENV["GITHUB_REPOSITORY"]}/commit/#{sha}",
+            },
+            {
+              "title": "Workflow",
+              "value": "https://github.com/#{ENV["GITHUB_REPOSITORY"]}/blob/#{sha}/.github/main.workflow",
             },
           ],
         },
