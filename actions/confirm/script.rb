@@ -37,7 +37,7 @@ class ActionConfirmation
 
       if user_response == "cancel"
         puts 'Got a "cancel" response, halting workflow.'
-        exit 1
+        exit 78
       end
 
       sleep 5
