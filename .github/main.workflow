@@ -44,14 +44,14 @@ action "Create Release" {
 
 action "Registry Login" {
   uses = "./.github/heroku"
-  needs = "Create Release"
+  needs = "Filter Master"
   args = "container:login"
   secrets = ["HEROKU_API_KEY"]
 }
 
 action "Container Push" {
   uses = "./.github/heroku"
-  needs = "Registry Login"
+  needs = ["Create Release", "Registry Login"]
   args = "container:push web --app $HEROKU_APP_NAME"
   secrets = ["HEROKU_API_KEY", "HEROKU_APP_NAME"]
 }
