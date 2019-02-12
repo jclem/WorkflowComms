@@ -56,9 +56,20 @@ action "Container Push" {
   secrets = ["HEROKU_API_KEY", "HEROKU_APP_NAME"]
 }
 
+action "Confirm Release" {
+  uses = "./actions/confirm"
+  needs = "Filter Master"
+  args = "User $GITHUB_ACTOR wants to deploy slack_actions. Do you wish to continue?"
+  secrets = ["SLACK_BOT_TOKEN"]
+  env = {
+    SLACK_ACTIONS_URL = "https://nameless-basin-14691.herokuapp.com"
+    SLACK_BOT_CHANNEL = "CCY4A8EKY"
+  }
+}
+
 action "Container Release" {
   uses = "./.github/heroku"
-  needs = "Container Push"
+  needs = ["Confirm Release", "Container Push"]
   args = "container:release web --app $HEROKU_APP_NAME"
   secrets = ["HEROKU_API_KEY", "HEROKU_APP_NAME"]
 }
