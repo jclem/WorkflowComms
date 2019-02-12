@@ -1,5 +1,10 @@
-workflow "Build & Release" {
+workflow "Release on Push" {
   on = "push"
+  resolves = ["Post Success Message"]
+}
+
+workflow "Release on Dispatch" {
+  on = "repository_dispatch"
   resolves = ["Post Success Message"]
 }
 
@@ -51,12 +56,16 @@ action "Registry Login" {
 
 action "Container Push" {
   uses = "./.github/heroku"
-  needs = ["Confirm Release", "Create Release", "Registry Login"]
+  needs = [
+    "Create Release",
+    "Registry Login",
+    "Confirm Deploy",
+  ]
   args = "container:push web --app $HEROKU_APP_NAME"
   secrets = ["HEROKU_API_KEY", "HEROKU_APP_NAME"]
 }
 
-action "Confirm Release" {
+action "Confirm Deploy" {
   uses = "./actions/confirm"
   needs = "Filter Master"
   args = "User $GITHUB_ACTOR wants to deploy slack_actions. Do you wish to continue?"
