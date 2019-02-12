@@ -51,7 +51,7 @@ class ActionConfirmation
 
   private def post_message
     uri = URI("https://slack.com/api/chat.postMessage")
-    sha = ENV["GITHUB_SHA"]
+    sha = ENV["GITHUB_SHA"].chomp # For act: https://github.com/nektos/act/issues/31
 
     resp = Net::HTTP.post_form(uri, {
       channel: ENV["SLACK_BOT_CHANNEL"],
