@@ -5,6 +5,6 @@ workflow "Post Message" {
 
 action "Post to #general" {
   uses = "./../../actions/post-message"
-  args = "Hello, world."
+  args = "User $GITHUB_ACTOR says hello."
   secrets = ["WEBHOOK_URL"]
 }

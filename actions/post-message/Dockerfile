@@ -9,6 +9,7 @@ LABEL "com.github.actions.description"="An action for posting a message to a Sla
 LABEL "com.github.actions.icon"="message-circle"
 LABEL "com.github.actions.color"="blue"
 
-COPY entrypoint.rb /entrypoint.rb
+COPY entrypoint.sh /entrypoint.sh
+COPY script.rb /script.rb
 
-ENTRYPOINT ["/entrypoint.rb"]
+ENTRYPOINT ["/entrypoint.sh"]

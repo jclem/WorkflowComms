@@ -5,7 +5,7 @@ workflow "Confirm a Choice" {
 
 action "Confirm" {
   uses = "./../../actions/confirm"
-  args = "Do you want to deploy?"
+  args = "User $GITHUB_ACTOR wants to deploy. Do you wish to continue?"
   secrets = ["SLACK_BOT_TOKEN"]
   env = {
     SLACK_ACTIONS_URL = "https://my-slack-app.example.com"
