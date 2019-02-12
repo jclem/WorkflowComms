@@ -2,7 +2,7 @@ defmodule SlackActionsWeb.RouterTest do
   use ExUnit.Case, async: true
   use Plug.Test
 
-  alias SlackActionsWeb.Router
+  alias SlackActionsWeb.{Router, SlackVerify}
 
   @opts Router.init([])
 
@@ -15,7 +15,7 @@ defmodule SlackActionsWeb.RouterTest do
     conn = conn(:get, "/ping") |> Router.call(@opts)
     assert conn.state == :sent
     assert conn.status == 200
-    assert conn.resp_body == "OK"
+    assert conn.resp_body == ~s({"ok":true})
   end
 
   test "GET /callbacks/:id" do
@@ -70,6 +70,7 @@ defmodule SlackActionsWeb.RouterTest do
 
     conn =
       conn(:post, "/callbacks", body)
+      |> sign_request(body)
       |> put_req_header("content-type", "application/x-www-form-urlencoded")
       |> Router.call(@opts)
 
@@ -84,6 +85,14 @@ defmodule SlackActionsWeb.RouterTest do
     conn = conn(:get, "/not-a-route") |> Router.call(@opts)
     assert conn.state == :sent
     assert conn.status == 404
-    assert conn.resp_body == "Not Found"
+    assert conn.resp_body == ~s({"error":"not_found"})
+  end
+
+  defp sign_request(conn, body) do
+    timestamp = DateTime.utc_now() |> DateTime.to_unix() |> to_string
+
+    conn
+    |> put_req_header("x-slack-signature", SlackVerify.compute_signature(body, timestamp))
+    |> put_req_header("x-slack-request-timestamp", timestamp)
   end
 end
