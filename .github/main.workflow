@@ -51,7 +51,7 @@ action "Registry Login" {
 
 action "Container Push" {
   uses = "./.github/heroku"
-  needs = ["Create Release", "Registry Login"]
+  needs = ["Confirm Release", "Create Release", "Registry Login"]
   args = "container:push web --app $HEROKU_APP_NAME"
   secrets = ["HEROKU_API_KEY", "HEROKU_APP_NAME"]
 }
@@ -69,7 +69,7 @@ action "Confirm Release" {
 
 action "Container Release" {
   uses = "./.github/heroku"
-  needs = ["Confirm Release", "Container Push"]
+  needs = "Container Push"
   args = "container:release web --app $HEROKU_APP_NAME"
   secrets = ["HEROKU_API_KEY", "HEROKU_APP_NAME"]
 }
