@@ -1,6 +1,6 @@
 workflow "Build & Release" {
   on = "push"
-  resolves = "Container Release"
+  resolves = ["Post Success Message"]
 }
 
 action "Filter Master" {
@@ -61,4 +61,11 @@ action "Container Release" {
   needs = "Container Push"
   args = "container:release web --app $HEROKU_APP_NAME"
   secrets = ["HEROKU_API_KEY", "HEROKU_APP_NAME"]
+}
+
+action "Post Success Message" {
+  uses = "./actions/post-message"
+  needs = ["Container Release"]
+  secrets = ["WEBHOOK_URL"]
+  args = "\"slack_actions\" has been deployed by $GITHUB_ACTOR"
 }
