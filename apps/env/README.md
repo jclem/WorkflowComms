@@ -1,21 +1,13 @@
 # Env
 
-**TODO: Add description**
+Provides simple getters for application config, and reads from the sysytem
+environment when `{:system, "KEY"}` tuples are present.
 
-## Installation
-
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `env` to your list of dependencies in `mix.exs`:
+## Example
 
 ```elixir
-def deps do
-  [
-    {:env, "~> 0.1.0"}
-  ]
+case Env.get(:my_app, :secret) do
+  {:ok, secret} -> IO.puts "Found a secret"
+  {:error, :not_found} -> IO.puts "No secret found"
 end
 ```
-
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/env](https://hexdocs.pm/env).
-

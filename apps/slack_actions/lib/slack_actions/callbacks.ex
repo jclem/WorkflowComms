@@ -1,20 +1,40 @@
 defmodule SlackActions.Callbacks do
+  @moduledoc """
+  Manages callbacks received from Slack.
+  """
+
   use GenServer
 
   require Logger
+
+  @type callback :: %{required(String.t()) => String.t() | callback}
 
   @init_state %{}
 
   # Public API
 
+  @doc """
+  Get a callback by a given `callback_id`.
+  """
+  @spec get_callback(String.t()) :: {:ok, callback} | {:error, :not_found}
   def get_callback(callback_id) do
     GenServer.call(__MODULE__, {:get, callback_id})
   end
 
+  @doc """
+  Store a callback by its `callback_id`.
+  """
+  @spec put_callback(String.t(), callback) :: :ok
   def put_callback(callback_id, callback) do
     GenServer.call(__MODULE__, {:put, callback_id, callback})
   end
 
+  @doc """
+  Reset the server's state.
+
+  This is only for use in testing.
+  """
+  @spec reset_state :: :ok
   def reset_state do
     GenServer.call(__MODULE__, :reset_state)
   end

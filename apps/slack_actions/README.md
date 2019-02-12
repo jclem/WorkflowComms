@@ -1,20 +1,5 @@
 # SlackActions
 
-**TODO: Add description**
-
-## Installation
-
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `slack_actions` to your list of dependencies in `mix.exs`:
-
-```elixir
-def deps do
-  [
-    {:slack_actions, "~> 0.1.0"}
-  ]
-end
-```
-
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/slack_actions](https://hexdocs.pm/slack_actions).
+This is the main functional module of this project. SlackActions is responsible
+for storing Slack action callbacks, as well as communicating with the Slack API
+where necessary.

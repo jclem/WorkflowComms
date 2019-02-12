@@ -9,6 +9,10 @@ defmodule SlackActionsWeb.SlackVerify do
 
   @version "v0"
 
+  @doc """
+  Verify a request's signature.
+  """
+  @spec verify_request(String.t(), String.t(), String.t()) :: :ok | {:error, :signature_mismatch}
   def verify_request(signature, timestamp, body) do
     body
     |> compute_signature(timestamp)

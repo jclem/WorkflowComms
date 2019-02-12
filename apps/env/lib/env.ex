@@ -14,6 +14,7 @@ defmodule Env do
       iex> Env.get(:env, :foo)
       {:error, :not_found}
   """
+  @spec get(atom, atom) :: {:ok, any} | {:error, :not_found}
   def get(application, key) do
     application
     |> Application.get_env(key)
@@ -34,8 +35,11 @@ defmodule Env do
       iex> Env.get!(:env, :foo)
       :bar
   """
+  @spec get!(atom, atom) :: any | no_return
   def get!(application, key) do
-    {:ok, value} = get(application, key)
-    value
+    case get(application, key) do
+      {:ok, value} -> value
+      _ -> raise "No value found for key #{key}"
+    end
   end
 end
