@@ -1,5 +1,5 @@
 workflow "Build & Release" {
-  on = "repository_dispatch"
+  on = "push"
   resolves = "Container Release"
 }
 
@@ -8,9 +8,36 @@ action "Filter Master" {
   args = "branch master"
 }
 
-action "Create Release" {
+action "Get Dependencies" {
   uses = "./.github/mix"
   needs = "Filter Master"
+  args = "deps.get"
+  env = {
+    MIX_ENV = "dev"
+  }
+}
+
+action "Run Tests" {
+  uses = "./.github/mix"
+  needs = "Get Dependencies"
+  args = "test"
+  env = {
+    MIX_ENV = "test"
+  }
+}
+
+action "Check Formatting" {
+  uses = "./.github/mix"
+  needs = "Get Dependencies"
+  args = "format --check-formatted"
+  env = {
+    MIX_ENV = "dev"
+  }
+}
+
+action "Create Release" {
+  uses = "./.github/mix"
+  needs = ["Run Tests", "Check Formatting"]
   args = "do deps.get, compile, release"
   secrets = ["COOKIE"]
 }
