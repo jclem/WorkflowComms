@@ -4,7 +4,7 @@ defmodule SlackActionsWeb.Application do
   use Application
 
   def start(_type, _args) do
-    port = Application.get_env(:slack_actions_web, :port)
+    port = Env.get!(:slack_actions_web, :port) |> String.to_integer()
 
     children = [
       Plug.Cowboy.child_spec(scheme: :http, plug: SlackActionsWeb.Router, options: [port: port])

@@ -15,17 +15,7 @@ defmodule SlackActions.SlackAPI do
 
   def process_request_body(body) do
     body
-    |> Keyword.put(:token, slack_bot_token())
+    |> Keyword.put(:token, Env.get!(:slack_actions, :slack_token))
     |> URI.encode_query()
-  end
-
-  defp slack_bot_token do
-    case Application.get_env(:slack_actions, :slack_token) do
-      {:system, key} ->
-        System.get_env(key)
-
-      key when is_binary(key) ->
-        key
-    end
   end
 end

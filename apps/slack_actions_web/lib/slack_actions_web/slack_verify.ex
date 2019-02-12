@@ -22,18 +22,13 @@ defmodule SlackActionsWeb.SlackVerify do
 
   def compute_signature(body, timestamp) do
     basestring = get_basestring(timestamp, body)
-    raw_signature = :crypto.hmac(:sha256, slack_signing_secret(), basestring)
+    slack_signing_secret = Env.get!(:slack_actions_web, :slack_signing_secret)
+    raw_signature = :crypto.hmac(:sha256, slack_signing_secret, basestring)
+
     "#{@version}=#{Base.encode16(raw_signature)}"
   end
 
   defp get_basestring(timestamp, body) do
     "#{@version}:#{timestamp}:#{body}"
-  end
-
-  defp slack_signing_secret do
-    case Application.get_env(:slack_actions_web, :slack_signing_secret) do
-      {:system, key} -> System.get_env(key)
-      value when is_binary(value) -> value
-    end
   end
 end
