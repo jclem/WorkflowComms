@@ -1,9 +1,12 @@
 defmodule SlackActionsUmbrella.MixProject do
   use Mix.Project
 
+  @vsn "1.0.0"
+
   def project do
     [
       apps_path: "apps",
+      version: @vsn,
       start_permanent: Mix.env() == :prod,
       deps: deps()
     ]
@@ -15,6 +18,6 @@ defmodule SlackActionsUmbrella.MixProject do
   #
   # Run "mix help deps" for examples and options.
   defp deps do
-    []
+    [{:distillery, "~> 1.5.0"}]
   end
 end
