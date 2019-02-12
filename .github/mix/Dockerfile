@@ -1,7 +1,8 @@
 FROM elixir:alpine
 
 ENV MIX_HOME=/.mix
-ENV MIX_ENV=prod
+ARG MIX_ENV=prod
+ENV MIX_ENV=$MIX_ENV
 
 RUN mix local.rebar --force
 RUN mix local.hex --force
