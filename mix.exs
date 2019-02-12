@@ -1,12 +1,9 @@
 defmodule SlackActionsUmbrella.MixProject do
   use Mix.Project
 
-  @vsn "1.0.0"
-
   def project do
     [
       apps_path: "apps",
-      version: @vsn,
       start_permanent: Mix.env() == :prod,
       deps: deps()
     ]
