@@ -8,6 +8,7 @@ use Mix.Config
 # configure all applications here, we prefer to delegate
 # back to each application for organization purposes.
 import_config "../apps/*/config/config.exs"
+import_config "#{Mix.env()}.exs"
 
 # Sample configuration (overrides the imported configuration above):
 #
