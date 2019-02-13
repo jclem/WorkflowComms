@@ -5,6 +5,7 @@ defmodule SlackActionsWeb.Verifier do
     quote do
       @behaviour SlackActionsWeb.Verifier
       import SlackActionsWeb.Verifier
+      import SlackActionsWeb.SecureCompare
     end
   end
 

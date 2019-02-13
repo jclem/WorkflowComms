@@ -14,7 +14,7 @@ defmodule SlackActionsWeb.Verifier.Slack do
   defp verify_request(signature, timestamp, body) do
     body
     |> compute_signature(timestamp)
-    |> SlackActionsWeb.SecureCompare.secure_compare(signature)
+    |> secure_compare(signature)
     |> if do
       :ok
     else
