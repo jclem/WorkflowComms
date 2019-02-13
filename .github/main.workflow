@@ -1,9 +1,9 @@
-workflow "Release on Push" {
+workflow "On Push" {
   on = "push"
   resolves = ["Post Success Message"]
 }
 
-workflow "Release on Dispatch" {
+workflow "On Dispatch" {
   on = "repository_dispatch"
   resolves = ["Post Success Message"]
 }
@@ -15,7 +15,6 @@ action "Filter Master" {
 
 action "Get Dependencies" {
   uses = "./.github/mix"
-  needs = "Filter Master"
   args = "deps.get"
   env = {
     MIX_ENV = "dev"
@@ -42,7 +41,7 @@ action "Check Formatting" {
 
 action "Create Release" {
   uses = "./.github/mix"
-  needs = ["Run Tests", "Check Formatting"]
+  needs = ["Run Tests", "Check Formatting", "Filter Master"]
   args = "do deps.get, compile, release"
   secrets = ["COOKIE"]
 }
@@ -54,17 +53,6 @@ action "Registry Login" {
   secrets = ["HEROKU_API_KEY"]
 }
 
-action "Container Push" {
-  uses = "./.github/heroku"
-  needs = [
-    "Create Release",
-    "Registry Login",
-    "Confirm Deploy",
-  ]
-  args = "container:push web --app $HEROKU_APP_NAME"
-  secrets = ["HEROKU_API_KEY", "HEROKU_APP_NAME"]
-}
-
 action "Confirm Deploy" {
   uses = "./actions/confirm"
   needs = "Filter Master"
@@ -74,6 +62,17 @@ action "Confirm Deploy" {
     SLACK_ACTIONS_URL = "https://nameless-basin-14691.herokuapp.com"
     SLACK_BOT_CHANNEL = "CCY4A8EKY"
   }
+}
+
+action "Container Push" {
+  uses = "./.github/heroku"
+  needs = [
+    "Create Release",
+    "Registry Login",
+    "Confirm Deploy",
+  ]
+  args = "container:push web --app $HEROKU_APP_NAME"
+  secrets = ["HEROKU_API_KEY", "HEROKU_APP_NAME"]
 }
 
 action "Container Release" {
