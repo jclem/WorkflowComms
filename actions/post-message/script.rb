@@ -4,7 +4,7 @@ require "json"
 require "net/http"
 
 resp = Net::HTTP.post(
-  URI("#{ENV["SLACK_ACTIONS_URL"]}/actions"),
+  URI("#{ENV["workflow_comms_URL"]}/actions"),
   {
     provider: ENV["MESSAGE_PROVIDER"],
     type: "notify",

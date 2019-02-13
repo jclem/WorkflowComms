@@ -9,7 +9,7 @@ class ActionConfirmation
 
   def initialize(msg_text)
     @msg_text = msg_text
-    uri = URI(ENV["SLACK_ACTIONS_URL"])
+    uri = URI(ENV["workflow_comms_URL"])
     @http = Net::HTTP.new(uri.host, uri.port)
     @http.use_ssl = true
   end

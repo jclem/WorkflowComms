@@ -30,14 +30,14 @@ environment :prod do
   set(cookie: System.get_env("COOKIE"))
 end
 
-release :slack_actions do
+release :workflow_comms do
   set(version: "0.1.0")
 
   set(
     applications: [
       :runtime_tools,
-      slack_actions: :permanent,
-      slack_actions_web: :permanent
+      workflow_comms: :permanent,
+      workflow_comms_web: :permanent
     ]
   )
 end

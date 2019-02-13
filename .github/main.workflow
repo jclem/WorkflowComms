@@ -56,10 +56,10 @@ action "Registry Login" {
 action "Confirm Deploy" {
   uses = "./actions/confirm"
   needs = "Filter Master"
-  args = "User $GITHUB_ACTOR wants to deploy slack_actions. Do you wish to continue?"
+  args = "User $GITHUB_ACTOR wants to deploy workflow_comms. Do you wish to continue?"
   secrets = ["SLACK_BOT_TOKEN"]
   env = {
-    SLACK_ACTIONS_URL = "https://nameless-basin-14691.herokuapp.com"
+    workflow_comms_URL = "https://nameless-basin-14691.herokuapp.com"
     SLACK_BOT_CHANNEL = "CCY4A8EKY"
   }
 }
@@ -86,5 +86,5 @@ action "Post Success Message" {
   uses = "./actions/post-message"
   needs = ["Container Release"]
   secrets = ["WEBHOOK_URL"]
-  args = "\"slack_actions\" has been deployed by $GITHUB_ACTOR"
+  args = "\"workflow_comms\" has been deployed by $GITHUB_ACTOR"
 }

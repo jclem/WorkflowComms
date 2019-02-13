@@ -1,3 +1,3 @@
-# SlackActions
+# WorkflowCommms
 
-SlackActions provides an interface between GitHub Actions and Slack.
+WorkflowCommms provides an interface between GitHub Actions and Slack.

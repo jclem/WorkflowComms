@@ -1,4 +1,4 @@
-defmodule SlackActionsUmbrella.MixProject do
+defmodule WorkflowCommmsUmbrella.MixProject do
   use Mix.Project
 
   def project do

@@ -1,7 +1,7 @@
 FROM ruby:slim
 
-LABEL "repository"="https://github.com/jclem/slack_actions"
-LABEL "homepage"="https://github.com/jclem/slack_actions/tree/master/post-message"
+LABEL "repository"="https://github.com/jclem/workflow_comms"
+LABEL "homepage"="https://github.com/jclem/workflow_comms/tree/master/post-message"
 LABEL "maintainer"="Jonathan Clem <jonathan@jclem.net>"
 
 LABEL "com.github.actions.name"="Post Message"
