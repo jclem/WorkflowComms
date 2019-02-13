@@ -2,8 +2,6 @@ defmodule WorkflowCommsWeb.RouterTest do
   use ExUnit.Case, async: true
   use Plug.Test
 
-  import Mock
-
   alias WorkflowCommsWeb.Router
   alias WorkflowCommsWeb.Verifier.Slack, as: SlackVerifier
   alias WorkflowComms.Action
@@ -58,13 +56,8 @@ defmodule WorkflowCommsWeb.RouterTest do
     assert Poison.decode!(conn.resp_body)["error"] == "not_found"
   end
 
-  test_with_mock "POST /actions", WorkflowComms.SlackAPI, post: &mock_post/2 do
-    body =
-      Poison.encode!(%{
-        provider: "slack",
-        type: "confirm",
-        action: %{GITHUB_ACTOR: "jclem"}
-      })
+  test "POST /actions" do
+    body = Poison.encode!(%{provider: "test"})
 
     conn =
       conn(:post, "/actions", body)
@@ -78,24 +71,21 @@ defmodule WorkflowCommsWeb.RouterTest do
     assert action.id == callback_id
   end
 
-  test_with_mock "POST /callbacks/:provider", WorkflowComms.SlackAPI, post: &mock_post/2 do
+  test "POST /callbacks/:provider" do
     {:ok, action} = WorkflowComms.Storage.put_action(%Action{})
 
     body =
-      URI.encode_query(
-        payload:
-          Poison.encode!(%{
-            callback_id: action.id,
-            message_ts: "123.456",
-            channel: %{id: "ch_id"},
-            actions: [%{name: "confirm"}]
-          })
-      )
+      Poison.encode!(%{
+        callback_id: action.id,
+        message_ts: "123.456",
+        channel: %{id: "ch_id"},
+        actions: [%{name: "confirm"}]
+      })
 
     conn =
-      conn(:post, "/callbacks/slack", body)
+      conn(:post, "/callbacks/test", body)
       |> sign_request(body)
-      |> put_req_header("content-type", "application/x-www-form-urlencoded")
+      |> put_req_header("content-type", "application/json")
       |> Router.call(@opts)
 
     assert conn.state == :sent
@@ -118,9 +108,5 @@ defmodule WorkflowCommsWeb.RouterTest do
     conn
     |> put_req_header("x-slack-signature", SlackVerifier.compute_signature(body, timestamp))
     |> put_req_header("x-slack-request-timestamp", timestamp)
-  end
-
-  defp mock_post(_url, _body) do
-    {:ok, %HTTPoison.Response{status_code: 200, body: %{"ok" => true}}}
   end
 end

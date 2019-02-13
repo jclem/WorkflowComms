@@ -6,7 +6,8 @@ defmodule WorkflowComms do
 
   @message_providers %{
     "slack" => WorkflowComms.MessageProvider.Slack,
-    "twilio" => WorkflowComms.MessageProvider.Twilio
+    "twilio" => WorkflowComms.MessageProvider.Twilio,
+    "test" => WorkflowComms.MessageProvider.Test
   }
 
   alias WorkflowComms.Action

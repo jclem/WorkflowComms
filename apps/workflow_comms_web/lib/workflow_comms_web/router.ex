@@ -10,12 +10,14 @@ defmodule WorkflowCommsWeb.Router do
 
   @verifiers %{
     "slack" => WorkflowCommsWeb.Verifier.Slack,
-    "twilio" => WorkflowCommsWeb.Verifier.Twilio
+    "twilio" => WorkflowCommsWeb.Verifier.Twilio,
+    "test" => WorkflowCommsWeb.Verifier.Test
   }
 
   @decoders %{
     "slack" => WorkflowCommsWeb.Decoder.Slack,
-    "twilio" => WorkflowCommsWeb.Decoder.Twilio
+    "twilio" => WorkflowCommsWeb.Decoder.Twilio,
+    "test" => WorkflowCommsWeb.Decoder.Test
   }
 
   use Plug.Router
