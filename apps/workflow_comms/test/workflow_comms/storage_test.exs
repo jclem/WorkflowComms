@@ -35,8 +35,8 @@ defmodule WorkflowComms.StorageTest do
   end
 
   test ".reset_state/0 clears state", %{storage: storage} do
-      {:ok, _} = GenServer.call(storage, {:put_action, @test_action})
-      GenServer.call(storage, :reset_state)
-      assert {:error, :not_found} == GenServer.call(storage, {:get_action, @test_action.id})
+    {:ok, _} = GenServer.call(storage, {:put_action, @test_action})
+    GenServer.call(storage, :reset_state)
+    assert {:error, :not_found} == GenServer.call(storage, {:get_action, @test_action.id})
   end
 end
