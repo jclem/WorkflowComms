@@ -7,7 +7,7 @@ action "Post to #general" {
   uses = "./../../actions/post-message"
   args = "User $GITHUB_ACTOR says hello."
   env = {
-    workflow_comms_URL = "https://my-workflow-app.example.com"
+    WORKFLOW_COMMS_URL = "https://my-workflow-app.example.com"
     MESSAGE_PROVIDER = "slack"
     SLACK_CHANNEL_ID = "CCY4A8EKY"
   }

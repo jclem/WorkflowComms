@@ -9,7 +9,7 @@ class ActionConfirmation
 
   def initialize(msg_text)
     @msg_text = msg_text
-    uri = URI(ENV["workflow_comms_URL"])
+    uri = URI(ENV["WORKFLOW_COMMS_URL"])
     @http = Net::HTTP.new(uri.host, uri.port)
     @http.use_ssl = true
   end

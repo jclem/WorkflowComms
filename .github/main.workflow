@@ -57,7 +57,7 @@ action "Confirm Deploy" {
   uses = "./actions/confirm"
   needs = "Filter Master"
   args = "User $GITHUB_ACTOR wants to deploy workflow_comms. Do you wish to continue?"
-  secrets = ["SLACK_BOT_TOKEN", "workflow_comms_URL"]
+  secrets = ["SLACK_BOT_TOKEN", "WORKFLOW_COMMS_URL"]
   env = {
     MESSAGE_PROVIDER = "slack"
     SLACK_CHANNEL_ID = "CCY4A8EKY"
@@ -85,7 +85,7 @@ action "Container Release" {
 action "Post Success Message" {
   uses = "./actions/post-message"
   needs = ["Container Release"]
-  secrets = ["WEBHOOK_URL", "workflow_comms_URL"]
+  secrets = ["WEBHOOK_URL", "WORKFLOW_COMMS_URL"]
   args = "\"workflow_comms\" has been deployed by $GITHUB_ACTOR"
   env = {
     MESSAGE_PROVIDER = "slack"
