@@ -59,7 +59,7 @@ action "Confirm Deploy" {
   args = "User $GITHUB_ACTOR wants to deploy workflow_comms. Do you wish to continue?"
   secrets = ["SLACK_BOT_TOKEN", "workflow_comms_URL"]
   env = {
-    MESSAGE_PROVIDER = "SLACK"
+    MESSAGE_PROVIDER = "slack"
     SLACK_CHANNEL_ID = "CCY4A8EKY"
   }
 }
