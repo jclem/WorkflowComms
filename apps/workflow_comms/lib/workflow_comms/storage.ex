@@ -1,6 +1,6 @@
-defmodule WorkflowComms.Callbacks do
+defmodule WorkflowComms.Storage do
   @moduledoc """
-  Manages callbacks received from Slack.
+  Manages actions and callbacks received from Slack.
   """
 
   use GenServer
@@ -80,7 +80,7 @@ defmodule WorkflowComms.Callbacks do
     case Map.get(actions, id) do
       action = %Action{} ->
         action = Map.put(action, :callback, callback)
-        {:reply, :ok, Map.put(actions, id, action)}
+        {:reply, {:ok, action}, Map.put(actions, id, action)}
 
       nil ->
         {:reply, {:error, :not_found}, actions}

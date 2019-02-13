@@ -28,14 +28,14 @@ defmodule WorkflowComms do
   @doc """
   Store a callback and update its Slack message.
   """
-  @spec handle_callback(String.t(), WorkflowComms.Callbacks.callback()) ::
+  @spec handle_callback(String.t(), WorkflowComms.Storage.callback()) ::
           {:ok, Action.t()} | {:error, any}
   def handle_callback(provider, %{"callback_id" => cb_id} = callback) do
     with mod when is_atom(mod) <- @message_providers[provider],
-         {:ok, action} <- WorkflowComms.Callbacks.get_action(cb_id),
+         {:ok, action} <- WorkflowComms.Storage.get_action(cb_id),
          action = Map.put(action, :callback, callback),
          {:ok, action} <- mod.handle_callback(action, callback),
-         {:ok, action} <- WorkflowComms.Callbacks.put_action(action) do
+         {:ok, action} <- WorkflowComms.Storage.put_action(action) do
       {:ok, action}
     end
   end

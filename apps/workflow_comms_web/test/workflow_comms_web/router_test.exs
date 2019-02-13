@@ -11,7 +11,7 @@ defmodule WorkflowCommsWeb.RouterTest do
   @opts Router.init([])
 
   setup do
-    WorkflowComms.Callbacks.reset_state()
+    WorkflowComms.Storage.reset_state()
     :ok
   end
 
@@ -23,7 +23,7 @@ defmodule WorkflowCommsWeb.RouterTest do
   end
 
   test "GET /actions/:id" do
-    {:ok, action} = WorkflowComms.Callbacks.put_action(%Action{})
+    {:ok, action} = WorkflowComms.Storage.put_action(%Action{})
 
     callback = %{
       "callback_id" => action.id,
@@ -31,7 +31,7 @@ defmodule WorkflowCommsWeb.RouterTest do
       "channel" => %{"id" => "id"}
     }
 
-    {:ok, action} = WorkflowComms.Callbacks.put_action(%{action | callback: callback})
+    {:ok, action} = WorkflowComms.Storage.put_action(%{action | callback: callback})
 
     conn =
       conn(:get, "/actions/#{action.id}")
@@ -74,12 +74,12 @@ defmodule WorkflowCommsWeb.RouterTest do
     assert conn.state == :sent
     assert conn.status == 201
     callback_id = Poison.decode!(conn.resp_body)["id"]
-    {:ok, action} = WorkflowComms.Callbacks.get_action(callback_id)
+    {:ok, action} = WorkflowComms.Storage.get_action(callback_id)
     assert action.id == callback_id
   end
 
   test_with_mock "POST /callbacks/:provider", WorkflowComms.SlackAPI, post: &mock_post/2 do
-    {:ok, action} = WorkflowComms.Callbacks.put_action(%Action{})
+    {:ok, action} = WorkflowComms.Storage.put_action(%Action{})
 
     body =
       URI.encode_query(
@@ -101,7 +101,7 @@ defmodule WorkflowCommsWeb.RouterTest do
     assert conn.state == :sent
     assert conn.status == 204
 
-    {:ok, %{callback: callback}} = WorkflowComms.Callbacks.get_action(action.id)
+    {:ok, %{callback: callback}} = WorkflowComms.Storage.get_action(action.id)
     assert callback["callback_id"] == action.id
   end
 

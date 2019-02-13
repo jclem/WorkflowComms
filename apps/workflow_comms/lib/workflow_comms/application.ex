@@ -8,7 +8,7 @@ defmodule WorkflowComms.Application do
   def start(_type, _args) do
     # List all child processes to be supervised
     children = [
-      {WorkflowComms.Callbacks, {[], [name: WorkflowComms.Callbacks]}}
+      {WorkflowComms.Storage, {[], [name: WorkflowComms.Storage]}}
       # Starts a worker by calling: WorkflowComms.Worker.start_link(arg)
       # {WorkflowComms.Worker, arg},
     ]

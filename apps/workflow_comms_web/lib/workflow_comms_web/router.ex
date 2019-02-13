@@ -45,7 +45,7 @@ defmodule WorkflowCommsWeb.Router do
   post "/actions" do
     action = Poison.Decode.transform(conn.body_params, %{as: %Action{}})
 
-    with {:ok, action} <- WorkflowComms.Callbacks.put_action(action),
+    with {:ok, action} <- WorkflowComms.Storage.put_action(action),
          :ok <- WorkflowComms.handle_action(action) do
       send_resp(conn, 201, Poison.encode!(action))
     else
@@ -54,7 +54,7 @@ defmodule WorkflowCommsWeb.Router do
   end
 
   get "/actions/:id" do
-    case WorkflowComms.Callbacks.get_action(conn.path_params["id"]) do
+    case WorkflowComms.Storage.get_action(conn.path_params["id"]) do
       {:ok, action} -> send_resp(conn, 200, Poison.encode!(action))
       {:error, :not_found} -> send_resp(conn, 404, @json_not_found)
     end
