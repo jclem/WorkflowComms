@@ -23,9 +23,10 @@ defmodule WorkflowCommmsWeb.Verifier.Slack do
   end
 
   defp string_to_integer(string) do
-    {:ok, String.to_integer(string)}
-  rescue
-    e in ArgumentError -> {:error, e}
+    case Integer.parse(string, 10) do
+      {int, ""} -> {:ok, int}
+      _ -> {:error, :invalid_integer_string}
+    end
   end
 
   defp verify_request(signature, timestamp, body) do
