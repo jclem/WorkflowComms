@@ -34,19 +34,6 @@ defmodule WorkflowComms.StorageTest do
     end
   end
 
-  describe ".put_callback/2" do
-    test "adds a callback to an action when found", %{storage: storage} do
-      callback = %{foo: "bar"}
-      {:ok, action} = GenServer.call(storage, {:put_action, @test_action})
-      {:ok, action} = GenServer.call(storage, {:put_callback, action.id, callback})
-      assert action.callback == callback
-    end
-
-    test "returns an error when the action is not found", %{storage: storage} do
-      {:error, :not_found} = GenServer.call(storage, {:put_callback, @test_action.id, %{}})
-    end
-  end
-
   test ".reset_state/0 clears state", %{storage: storage} do
       {:ok, _} = GenServer.call(storage, {:put_action, @test_action})
       GenServer.call(storage, :reset_state)

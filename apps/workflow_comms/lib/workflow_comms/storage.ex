@@ -74,19 +74,6 @@ defmodule WorkflowComms.Storage do
     end
   end
 
-  def handle_call({:put_callback, id, callback}, _from, actions) do
-    Logger.debug("Putting callback #{id}: #{inspect(callback)}")
-
-    case Map.get(actions, id) do
-      action = %Action{} ->
-        action = Map.put(action, :callback, callback)
-        {:reply, {:ok, action}, Map.put(actions, id, action)}
-
-      nil ->
-        {:reply, {:error, :not_found}, actions}
-    end
-  end
-
   def handle_call(:reset_state, _from, _state) do
     {:reply, :ok, @init_state}
   end
