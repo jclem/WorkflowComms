@@ -1,4 +1,4 @@
-defmodule WorkflowCommmsTest do
+defmodule WorkflowCommsTest do
   use ExUnit.Case
-  doctest WorkflowCommms
+  doctest WorkflowComms
 end

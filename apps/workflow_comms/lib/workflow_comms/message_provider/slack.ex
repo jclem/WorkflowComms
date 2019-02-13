@@ -1,12 +1,12 @@
-defmodule WorkflowCommms.MessageProvider.Slack do
-  use WorkflowCommms.MessageProvider
+defmodule WorkflowComms.MessageProvider.Slack do
+  use WorkflowComms.MessageProvider
 
   require Logger
 
-  alias WorkflowCommms.{Action, SlackAPI}
+  alias WorkflowComms.{Action, SlackAPI}
   alias HTTPoison.Response
 
-  @impl WorkflowCommms.MessageProvider
+  @impl WorkflowComms.MessageProvider
   def handle_callback(action, callback) do
     update_callback_message(action, callback["message_ts"])
     response = get_in(callback, ["actions", Access.at(0), "name"])
@@ -33,7 +33,7 @@ defmodule WorkflowCommms.MessageProvider.Slack do
     end
   end
 
-  @impl WorkflowCommms.MessageProvider
+  @impl WorkflowComms.MessageProvider
   def handle_action(action = %Action{type: "notify"}) do
     SlackAPI.post(
       "/chat.postMessage",
@@ -44,7 +44,7 @@ defmodule WorkflowCommms.MessageProvider.Slack do
     |> process_response()
   end
 
-  @impl WorkflowCommms.MessageProvider
+  @impl WorkflowComms.MessageProvider
   def handle_action(action = %Action{type: "confirm"}) do
     SlackAPI.post(
       "/chat.postMessage",

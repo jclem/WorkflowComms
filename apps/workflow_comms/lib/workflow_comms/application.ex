@@ -1,4 +1,4 @@
-defmodule WorkflowCommms.Application do
+defmodule WorkflowComms.Application do
   # See https://hexdocs.pm/elixir/Application.html
   # for more information on OTP Applications
   @moduledoc false
@@ -8,14 +8,14 @@ defmodule WorkflowCommms.Application do
   def start(_type, _args) do
     # List all child processes to be supervised
     children = [
-      {WorkflowCommms.Callbacks, {[], [name: WorkflowCommms.Callbacks]}}
-      # Starts a worker by calling: WorkflowCommms.Worker.start_link(arg)
-      # {WorkflowCommms.Worker, arg},
+      {WorkflowComms.Callbacks, {[], [name: WorkflowComms.Callbacks]}}
+      # Starts a worker by calling: WorkflowComms.Worker.start_link(arg)
+      # {WorkflowComms.Worker, arg},
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
-    opts = [strategy: :one_for_one, name: WorkflowCommms.Supervisor]
+    opts = [strategy: :one_for_one, name: WorkflowComms.Supervisor]
     Supervisor.start_link(children, opts)
   end
 end

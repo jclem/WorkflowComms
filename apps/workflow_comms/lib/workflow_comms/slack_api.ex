@@ -1,4 +1,4 @@
-defmodule WorkflowCommms.SlackAPI do
+defmodule WorkflowComms.SlackAPI do
   @moduledoc false
 
   use HTTPoison.Base

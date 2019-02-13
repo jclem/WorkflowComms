@@ -1,17 +1,17 @@
-defmodule WorkflowCommmsWeb.RouterTest do
+defmodule WorkflowCommsWeb.RouterTest do
   use ExUnit.Case, async: true
   use Plug.Test
 
   import Mock
 
-  alias WorkflowCommmsWeb.Router
-  alias WorkflowCommmsWeb.Verifier.Slack, as: SlackVerifier
-  alias WorkflowCommms.Action
+  alias WorkflowCommsWeb.Router
+  alias WorkflowCommsWeb.Verifier.Slack, as: SlackVerifier
+  alias WorkflowComms.Action
 
   @opts Router.init([])
 
   setup do
-    WorkflowCommms.Callbacks.reset_state()
+    WorkflowComms.Callbacks.reset_state()
     :ok
   end
 
@@ -23,7 +23,7 @@ defmodule WorkflowCommmsWeb.RouterTest do
   end
 
   test "GET /actions/:id" do
-    {:ok, action} = WorkflowCommms.Callbacks.put_action(%Action{})
+    {:ok, action} = WorkflowComms.Callbacks.put_action(%Action{})
 
     callback = %{
       "callback_id" => action.id,
@@ -31,7 +31,7 @@ defmodule WorkflowCommmsWeb.RouterTest do
       "channel" => %{"id" => "id"}
     }
 
-    {:ok, action} = WorkflowCommms.Callbacks.put_action(%{action | callback: callback})
+    {:ok, action} = WorkflowComms.Callbacks.put_action(%{action | callback: callback})
 
     conn =
       conn(:get, "/actions/#{action.id}")
@@ -58,7 +58,7 @@ defmodule WorkflowCommmsWeb.RouterTest do
     assert Poison.decode!(conn.resp_body)["error"] == "not_found"
   end
 
-  test_with_mock "POST /actions", WorkflowCommms.SlackAPI, post: &mock_post/2 do
+  test_with_mock "POST /actions", WorkflowComms.SlackAPI, post: &mock_post/2 do
     body =
       Poison.encode!(%{
         provider: "slack",
@@ -74,12 +74,12 @@ defmodule WorkflowCommmsWeb.RouterTest do
     assert conn.state == :sent
     assert conn.status == 201
     callback_id = Poison.decode!(conn.resp_body)["id"]
-    {:ok, action} = WorkflowCommms.Callbacks.get_action(callback_id)
+    {:ok, action} = WorkflowComms.Callbacks.get_action(callback_id)
     assert action.id == callback_id
   end
 
-  test_with_mock "POST /callbacks/:provider", WorkflowCommms.SlackAPI, post: &mock_post/2 do
-    {:ok, action} = WorkflowCommms.Callbacks.put_action(%Action{})
+  test_with_mock "POST /callbacks/:provider", WorkflowComms.SlackAPI, post: &mock_post/2 do
+    {:ok, action} = WorkflowComms.Callbacks.put_action(%Action{})
 
     body =
       URI.encode_query(
@@ -101,7 +101,7 @@ defmodule WorkflowCommmsWeb.RouterTest do
     assert conn.state == :sent
     assert conn.status == 204
 
-    {:ok, %{callback: callback}} = WorkflowCommms.Callbacks.get_action(action.id)
+    {:ok, %{callback: callback}} = WorkflowComms.Callbacks.get_action(action.id)
     assert callback["callback_id"] == action.id
   end
 

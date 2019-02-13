@@ -1,4 +1,4 @@
-defmodule WorkflowCommmsWeb.MixProject do
+defmodule WorkflowCommsWeb.MixProject do
   use Mix.Project
 
   def project do
@@ -19,7 +19,7 @@ defmodule WorkflowCommmsWeb.MixProject do
   def application do
     [
       extra_applications: [:logger],
-      mod: {WorkflowCommmsWeb.Application, []}
+      mod: {WorkflowCommsWeb.Application, []}
     ]
   end
 

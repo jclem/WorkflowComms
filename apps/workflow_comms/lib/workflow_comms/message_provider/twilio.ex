@@ -1,9 +1,9 @@
-defmodule WorkflowCommms.MessageProvider.Twilio do
-  use WorkflowCommms.MessageProvider
+defmodule WorkflowComms.MessageProvider.Twilio do
+  use WorkflowComms.MessageProvider
 
-  alias WorkflowCommms.Action
+  alias WorkflowComms.Action
 
-  @impl WorkflowCommms.MessageProvider
+  @impl WorkflowComms.MessageProvider
   def handle_callback(action, callback) do
     response = Map.get(callback, "action")
     action = Map.put(action, :result, %{})
@@ -11,7 +11,7 @@ defmodule WorkflowCommms.MessageProvider.Twilio do
     {:ok, action}
   end
 
-  @impl WorkflowCommms.MessageProvider
+  @impl WorkflowComms.MessageProvider
   def handle_action(action = %Action{type: "confirm"}) do
     HTTPoison.post!(
       action.meta["twilio_workflow_url"],

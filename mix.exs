@@ -1,4 +1,4 @@
-defmodule WorkflowCommmsUmbrella.MixProject do
+defmodule WorkflowCommsUmbrella.MixProject do
   use Mix.Project
 
   def project do

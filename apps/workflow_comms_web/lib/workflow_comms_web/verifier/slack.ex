@@ -1,11 +1,11 @@
-defmodule WorkflowCommmsWeb.Verifier.Slack do
+defmodule WorkflowCommsWeb.Verifier.Slack do
   @slack_api_vsn "v0"
 
-  use WorkflowCommmsWeb.Verifier
+  use WorkflowCommsWeb.Verifier
 
   require Logger
 
-  @impl WorkflowCommmsWeb.Verifier
+  @impl WorkflowCommsWeb.Verifier
   def verify(conn) do
     with {:ok, signature} <- get_one_header(conn, "x-slack-signature"),
          {:ok, timestamp} <- get_one_header(conn, "x-slack-request-timestamp"),

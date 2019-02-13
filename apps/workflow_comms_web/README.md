@@ -1,3 +1,3 @@
-# WorkflowCommmsWeb
+# WorkflowCommsWeb
 
-This is the web interface to WorkflowCommms.
+This is the web interface to WorkflowComms.

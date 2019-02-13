@@ -1,15 +1,15 @@
-defmodule WorkflowCommms do
+defmodule WorkflowComms do
   @moduledoc """
   A module for storing action callbacks received by Slack and then updating
   action messages
   """
 
   @message_providers %{
-    "slack" => WorkflowCommms.MessageProvider.Slack,
-    "twilio" => WorkflowCommms.MessageProvider.Twilio
+    "slack" => WorkflowComms.MessageProvider.Slack,
+    "twilio" => WorkflowComms.MessageProvider.Twilio
   }
 
-  alias WorkflowCommms.Action
+  alias WorkflowComms.Action
 
   @doc """
   Handle an action.
@@ -28,14 +28,14 @@ defmodule WorkflowCommms do
   @doc """
   Store a callback and update its Slack message.
   """
-  @spec handle_callback(String.t(), WorkflowCommms.Callbacks.callback()) ::
+  @spec handle_callback(String.t(), WorkflowComms.Callbacks.callback()) ::
           {:ok, Action.t()} | {:error, any}
   def handle_callback(provider, %{"callback_id" => cb_id} = callback) do
     with mod when is_atom(mod) <- @message_providers[provider],
-         {:ok, action} <- WorkflowCommms.Callbacks.get_action(cb_id),
+         {:ok, action} <- WorkflowComms.Callbacks.get_action(cb_id),
          action = Map.put(action, :callback, callback),
          {:ok, action} <- mod.handle_callback(action, callback),
-         {:ok, action} <- WorkflowCommms.Callbacks.put_action(action) do
+         {:ok, action} <- WorkflowComms.Callbacks.put_action(action) do
       {:ok, action}
     end
   end

@@ -1,4 +1,4 @@
-defmodule WorkflowCommmsWeb.SecureCompare do
+defmodule WorkflowCommsWeb.SecureCompare do
   @moduledoc """
   Performs constant-time comparison on strings of equal length
   """
@@ -8,13 +8,13 @@ defmodule WorkflowCommmsWeb.SecureCompare do
   @doc """
   Perform a constant-time comparison on two strings.
 
-      iex> WorkflowCommmsWeb.SecureCompare.secure_compare("foo", "")
+      iex> WorkflowCommsWeb.SecureCompare.secure_compare("foo", "")
       false
 
-      iex> WorkflowCommmsWeb.SecureCompare.secure_compare("foo", "bar")
+      iex> WorkflowCommsWeb.SecureCompare.secure_compare("foo", "bar")
       false
 
-      iex> WorkflowCommmsWeb.SecureCompare.secure_compare("foo", "foo")
+      iex> WorkflowCommsWeb.SecureCompare.secure_compare("foo", "foo")
       true
   """
   @spec secure_compare(Strint.t(), String.t()) :: boolean

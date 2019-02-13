@@ -1,8 +1,8 @@
-defmodule WorkflowCommmsWeb.SecureCompareTest do
+defmodule WorkflowCommsWeb.SecureCompareTest do
   use ExUnit.Case, async: true
-  doctest WorkflowCommmsWeb.SecureCompare
+  doctest WorkflowCommsWeb.SecureCompare
 
-  alias WorkflowCommmsWeb.SecureCompare
+  alias WorkflowCommsWeb.SecureCompare
 
   describe ".secure_compare/2" do
     test "is false when lengths differ" do

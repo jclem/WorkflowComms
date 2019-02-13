@@ -1,7 +1,7 @@
-defmodule WorkflowCommmsWeb.Decoder.Twilio do
-  use WorkflowCommmsWeb.Decoder
+defmodule WorkflowCommsWeb.Decoder.Twilio do
+  use WorkflowCommsWeb.Decoder
 
-  @impl WorkflowCommmsWeb.Decoder
+  @impl WorkflowCommsWeb.Decoder
   def decode(body_params) do
     {:ok, body_params}
   end

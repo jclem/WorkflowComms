@@ -1,4 +1,4 @@
-defmodule WorkflowCommmsWeb.Application do
+defmodule WorkflowCommsWeb.Application do
   @moduledoc false
 
   use Application
@@ -7,10 +7,10 @@ defmodule WorkflowCommmsWeb.Application do
     port = Env.get!(:workflow_comms_web, :port) |> String.to_integer()
 
     children = [
-      Plug.Cowboy.child_spec(scheme: :http, plug: WorkflowCommmsWeb.Router, options: [port: port])
+      Plug.Cowboy.child_spec(scheme: :http, plug: WorkflowCommsWeb.Router, options: [port: port])
     ]
 
-    opts = [strategy: :one_for_one, name: WorkflowCommmsWeb.Supervisor]
+    opts = [strategy: :one_for_one, name: WorkflowCommsWeb.Supervisor]
     Supervisor.start_link(children, opts)
   end
 end

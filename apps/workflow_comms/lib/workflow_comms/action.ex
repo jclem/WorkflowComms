@@ -1,4 +1,4 @@
-defmodule WorkflowCommms.Action do
+defmodule WorkflowComms.Action do
   @type t :: %__MODULE__{}
 
   @derive [Poison.Encoder]

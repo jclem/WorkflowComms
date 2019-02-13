@@ -1,4 +1,4 @@
-defmodule WorkflowCommmsWeb.Router do
+defmodule WorkflowCommsWeb.Router do
   @moduledoc false
 
   require Logger
@@ -9,18 +9,18 @@ defmodule WorkflowCommmsWeb.Router do
   @json_unprocessable_entity Poison.encode!(%{error: "unprocessable_entity"})
 
   @verifiers %{
-    "slack" => WorkflowCommmsWeb.Verifier.Slack,
-    "twilio" => WorkflowCommmsWeb.Verifier.Twilio
+    "slack" => WorkflowCommsWeb.Verifier.Slack,
+    "twilio" => WorkflowCommsWeb.Verifier.Twilio
   }
 
   @decoders %{
-    "slack" => WorkflowCommmsWeb.Decoder.Slack,
-    "twilio" => WorkflowCommmsWeb.Decoder.Twilio
+    "slack" => WorkflowCommsWeb.Decoder.Slack,
+    "twilio" => WorkflowCommsWeb.Decoder.Twilio
   }
 
   use Plug.Router
 
-  alias WorkflowCommms.Action
+  alias WorkflowComms.Action
 
   if Mix.env() !== :test do
     plug(Plug.Logger)
@@ -33,7 +33,7 @@ defmodule WorkflowCommmsWeb.Router do
     parsers: [:json, :urlencoded],
     pass: ["application/json", "application/x-www-form-urlencoded"],
     json_decoder: Poison,
-    body_reader: {WorkflowCommmsWeb.CopyBodyReader, :read_body, []}
+    body_reader: {WorkflowCommsWeb.CopyBodyReader, :read_body, []}
   )
 
   plug(:dispatch)
@@ -45,8 +45,8 @@ defmodule WorkflowCommmsWeb.Router do
   post "/actions" do
     action = Poison.Decode.transform(conn.body_params, %{as: %Action{}})
 
-    with {:ok, action} <- WorkflowCommms.Callbacks.put_action(action),
-         :ok <- WorkflowCommms.handle_action(action) do
+    with {:ok, action} <- WorkflowComms.Callbacks.put_action(action),
+         :ok <- WorkflowComms.handle_action(action) do
       send_resp(conn, 201, Poison.encode!(action))
     else
       {:error, _} -> send_resp(conn, 422, @json_unprocessable_entity)
@@ -54,7 +54,7 @@ defmodule WorkflowCommmsWeb.Router do
   end
 
   get "/actions/:id" do
-    case WorkflowCommms.Callbacks.get_action(conn.path_params["id"]) do
+    case WorkflowComms.Callbacks.get_action(conn.path_params["id"]) do
       {:ok, action} -> send_resp(conn, 200, Poison.encode!(action))
       {:error, :not_found} -> send_resp(conn, 404, @json_not_found)
     end
@@ -67,7 +67,7 @@ defmodule WorkflowCommmsWeb.Router do
 
     with :ok <- ver_mod.verify(conn),
          {:ok, callback} <- dec_mod.decode(conn.body_params),
-         {:ok, _action} <- WorkflowCommms.handle_callback(conn.path_params["provider"], callback) do
+         {:ok, _action} <- WorkflowComms.handle_callback(conn.path_params["provider"], callback) do
       send_resp(conn, 204, "")
     else
       err ->

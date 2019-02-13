@@ -1,4 +1,4 @@
-defmodule WorkflowCommmsWeb.CopyBodyReader do
+defmodule WorkflowCommsWeb.CopyBodyReader do
   @moduledoc """
   This module provides a `read_body/2` function that copies a request body into
   a connection's private properties.

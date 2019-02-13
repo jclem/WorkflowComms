@@ -1,4 +1,4 @@
-defmodule WorkflowCommms.Callbacks do
+defmodule WorkflowComms.Callbacks do
   @moduledoc """
   Manages callbacks received from Slack.
   """
@@ -7,7 +7,7 @@ defmodule WorkflowCommms.Callbacks do
 
   require Logger
 
-  alias WorkflowCommms.Action
+  alias WorkflowComms.Action
 
   @type callback :: %{required(String.t()) => String.t() | callback}
 

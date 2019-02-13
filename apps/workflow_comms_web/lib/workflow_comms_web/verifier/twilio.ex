@@ -1,7 +1,7 @@
-defmodule WorkflowCommmsWeb.Verifier.Twilio do
-  use WorkflowCommmsWeb.Verifier
+defmodule WorkflowCommsWeb.Verifier.Twilio do
+  use WorkflowCommsWeb.Verifier
 
-  @impl WorkflowCommmsWeb.Verifier
+  @impl WorkflowCommsWeb.Verifier
   def verify(conn) do
     with {:ok, signature} <- get_one_header(conn, "x-twilio-signature"),
          :ok <- verify_request(conn, signature) do

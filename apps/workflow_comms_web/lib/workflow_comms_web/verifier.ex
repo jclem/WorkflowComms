@@ -1,11 +1,11 @@
-defmodule WorkflowCommmsWeb.Verifier do
+defmodule WorkflowCommsWeb.Verifier do
   @callback verify(Plug.Conn.t()) :: :ok | {:error, atom}
 
   defmacro __using__(_opts) do
     quote do
-      @behaviour WorkflowCommmsWeb.Verifier
-      import WorkflowCommmsWeb.Verifier
-      import WorkflowCommmsWeb.SecureCompare
+      @behaviour WorkflowCommsWeb.Verifier
+      import WorkflowCommsWeb.Verifier
+      import WorkflowCommsWeb.SecureCompare
     end
   end
 
