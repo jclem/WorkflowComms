@@ -85,7 +85,7 @@ action "Container Release" {
 action "Post Success Message" {
   uses = "./actions/post-message"
   needs = ["Container Release"]
-  secrets = ["WEBHOOK_URL", "WORKFLOW_COMMS_URL"]
+  secrets = ["WORKFLOW_COMMS_URL"]
   args = "\"workflow_comms\" has been deployed by $GITHUB_ACTOR"
   env = {
     MESSAGE_PROVIDER = "slack"
