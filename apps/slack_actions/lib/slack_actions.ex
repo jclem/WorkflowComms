@@ -4,29 +4,39 @@ defmodule SlackActions do
   action messages
   """
 
-  alias SlackActions.SlackAPI
+  @message_providers %{
+    "slack" => SlackActions.MessageProvider.Slack,
+    "twilio" => SlackActions.MessageProvider.Twilio
+  }
+
+  alias SlackActions.Action
+
+  @doc """
+  Handle an action.
+  """
+  @spec handle_action(Action.t()) :: :ok | {:error, term}
+  def handle_action(action) do
+    case @message_providers[action.provider] do
+      mod when is_atom(mod) ->
+        mod.handle_action(action)
+
+      _ ->
+        {:error, :no_such_provider}
+    end
+  end
 
   @doc """
   Store a callback and update its Slack message.
   """
-  @spec handle_callback(SlackActions.Callbacks.callback()) :: :ok | no_return
-  def handle_callback(
-        %{"callback_id" => cb_id, "message_ts" => msg_ts, "channel" => %{"id" => ch_id}} =
-          callback
-      ) do
-    with SlackActions.Callbacks.put_callback(cb_id, callback),
-         update_callback_message(ch_id, msg_ts) do
-      :ok
+  @spec handle_callback(String.t(), SlackActions.Callbacks.callback()) ::
+          {:ok, Action.t()} | {:error, any}
+  def handle_callback(provider, %{"callback_id" => cb_id} = callback) do
+    with mod when is_atom(mod) <- @message_providers[provider],
+         {:ok, action} <- SlackActions.Callbacks.get_action(cb_id),
+         action = Map.put(action, :callback, callback),
+         {:ok, action} <- mod.handle_callback(action, callback),
+         {:ok, action} <- SlackActions.Callbacks.put_action(action) do
+      {:ok, action}
     end
-  end
-
-  defp update_callback_message(ch_id, msg_ts) do
-    SlackAPI.post!(
-      "/chat.update",
-      channel: ch_id,
-      ts: msg_ts,
-      text: "Thank you!",
-      attachments: nil
-    )
   end
 end

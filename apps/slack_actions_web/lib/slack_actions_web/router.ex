@@ -6,10 +6,21 @@ defmodule SlackActionsWeb.Router do
   @json_bad_request Poison.encode!(%{error: "bad_request"})
   @json_ok Poison.encode!(%{ok: true})
   @json_not_found Poison.encode!(%{error: "not_found"})
+  @json_unprocessable_entity Poison.encode!(%{error: "unprocessable_entity"})
+
+  @verifiers %{
+    "slack" => SlackActionsWeb.Verifier.Slack,
+    "twilio" => SlackActionsWeb.Verifier.Twilio
+  }
+
+  @decoders %{
+    "slack" => SlackActionsWeb.Decoder.Slack,
+    "twilio" => SlackActionsWeb.Decoder.Twilio
+  }
 
   use Plug.Router
 
-  alias SlackActionsWeb.SlackVerify
+  alias SlackActions.Action
 
   if Mix.env() !== :test do
     plug(Plug.Logger)
@@ -31,18 +42,32 @@ defmodule SlackActionsWeb.Router do
     send_resp(conn, 200, @json_ok)
   end
 
-  get "/callbacks/:id" do
-    case SlackActions.Callbacks.get_callback(conn.path_params["id"]) do
-      {:ok, callback} -> send_resp(conn, 200, Poison.encode!(callback))
+  post "/actions" do
+    action = Poison.Decode.transform(conn.body_params, %{as: %Action{}})
+
+    with {:ok, action} <- SlackActions.Callbacks.put_action(action),
+         :ok <- SlackActions.handle_action(action) do
+      send_resp(conn, 201, Poison.encode!(action))
+    else
+      {:error, _} -> send_resp(conn, 422, @json_unprocessable_entity)
+    end
+  end
+
+  get "/actions/:id" do
+    case SlackActions.Callbacks.get_action(conn.path_params["id"]) do
+      {:ok, action} -> send_resp(conn, 200, Poison.encode!(action))
       {:error, :not_found} -> send_resp(conn, 404, @json_not_found)
     end
   end
 
-  post "/callbacks" do
-    with :ok <- verify_request(conn),
-         payload when is_binary(payload) <- Map.get(conn.body_params, "payload"),
-         {:ok, callback} <- Poison.decode(payload),
-         :ok <- SlackActions.handle_callback(callback) do
+  post "/callbacks/:provider" do
+    provider = conn.path_params["provider"]
+    ver_mod = @verifiers[provider]
+    dec_mod = @decoders[provider]
+
+    with :ok <- ver_mod.verify(conn),
+         {:ok, callback} <- dec_mod.decode(conn.body_params),
+         {:ok, _action} <- SlackActions.handle_callback(conn.path_params["provider"], callback) do
       send_resp(conn, 204, "")
     else
       err ->
@@ -57,20 +82,5 @@ defmodule SlackActionsWeb.Router do
 
   defp json_response(conn, _opts) do
     put_resp_header(conn, "content-type", "application/json")
-  end
-
-  defp verify_request(conn) do
-    with {:ok, signature} <- get_one_header(conn, "x-slack-signature"),
-         {:ok, timestamp} <- get_one_header(conn, "x-slack-request-timestamp") do
-      SlackVerify.verify_request(signature, timestamp, conn.private[:raw_body])
-    end
-  end
-
-  defp get_one_header(conn, header) do
-    case get_req_header(conn, header) do
-      [value] -> {:ok, value}
-      [_ | _] -> {:error, :too_many_header_values}
-      [] -> {:error, :no_header_values}
-    end
   end
 end

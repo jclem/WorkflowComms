@@ -2,7 +2,10 @@
 # and its dependencies with the aid of the Mix.Config module.
 use Mix.Config
 
-config :slack_actions, :slack_token, {:system, "SLACK_BOT_TOKEN"}
+config :slack_actions,
+  slack_token: {:system, "SLACK_BOT_TOKEN"},
+  twilio_sid: {:system, "TWILIO_SID"},
+  twilio_token: {:system, "TWILIO_TOKEN"}
 
 # This configuration is loaded before any dependency and is restricted
 # to this project. If another project depends on this project, this

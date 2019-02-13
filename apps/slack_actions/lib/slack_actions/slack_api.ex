@@ -13,9 +13,13 @@ defmodule SlackActions.SlackAPI do
     [{"content-type", "application/x-www-form-urlencoded"} | headers]
   end
 
-  def process_request_body(body) do
+  def process_request_body(body) when is_list(body) do
     body
     |> Keyword.put(:token, Env.get!(:slack_actions, :slack_token))
     |> URI.encode_query()
   end
+
+  def process_request_body(body), do: body
+
+  def process_response_body(body), do: Poison.decode!(body)
 end

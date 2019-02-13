@@ -27,7 +27,8 @@ defmodule SlackActions.MixProject do
   defp deps do
     [
       {:httpoison, "~> 1.5.0"},
-      {:env, in_umbrella: true}
+      {:env, in_umbrella: true},
+      {:poison, "~> 4.0.1"}
       # {:dep_from_hexpm, "~> 0.3.0"},
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"},
       # {:sibling_app_in_umbrella, in_umbrella: true},

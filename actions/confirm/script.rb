@@ -2,12 +2,16 @@
 
 require "json"
 require "net/http"
-require "securerandom"
+require "pp"
 
 class ActionConfirmation
+  attr_accessor :action_id
+
   def initialize(msg_text)
-    @callback_id = SecureRandom.uuid
     @msg_text = msg_text
+    uri = URI(ENV["SLACK_ACTIONS_URL"])
+    @http = Net::HTTP.new(uri.host, uri.port)
+    @http.use_ssl = true
   end
 
   def confirm!
@@ -15,11 +19,24 @@ class ActionConfirmation
     poll_response
   end
 
+  private def print_response(label, resp)
+    puts "=== Response from #{label}"
+
+    pp resp
+    resp.each_header { |key, value| puts "#{key}: #{value}" }
+
+    begin
+      pp JSON.parse(resp.body)
+    rescue
+      pp resp.body
+    end
+  end
+
   private def check_response
-    uri = URI("#{ENV["SLACK_ACTIONS_URL"]}/callbacks/#{@callback_id}")
-    resp = Net::HTTP.get(uri)
-    body = JSON.parse(resp)
-    body.dig("actions", 0, "name")
+    resp = @http.get("/actions/#{action_id}")
+    print_response("GET /actions/:id", resp)
+    body = JSON.parse(resp.body)
+    body.dig("result", "response")
   end
 
   private def poll_response
@@ -50,72 +67,37 @@ class ActionConfirmation
   end
 
   private def post_message
-    uri = URI("https://slack.com/api/chat.postMessage")
-    sha = ENV["GITHUB_SHA"].chomp # For act: https://github.com/nektos/act/issues/31
-
-    resp = Net::HTTP.post_form(uri, {
-      channel: ENV["SLACK_BOT_CHANNEL"],
-      token: ENV["SLACK_BOT_TOKEN"],
-      attachments: [
-        {
-          title: @msg_text,
-          color: "good",
-          fields: [
-            {
-              "title": "Name",
-              "value": ENV["GITHUB_WORKFLOW"],
-              "short": true,
-            },
-            {
-              "title": "Repository",
-              "value": "https://github.com/#{ENV["GITHUB_REPOSITORY"]}",
-              "short": true,
-            },
-            {
-              "title": "Event",
-              "value": ENV["GITHUB_EVENT_NAME"],
-              "short": true,
-            },
-            {
-              "title": "Commit",
-              "value": "https://github.com/#{ENV["GITHUB_REPOSITORY"]}/commit/#{sha}",
-            },
-            {
-              "title": "Workflow",
-              "value": "https://github.com/#{ENV["GITHUB_REPOSITORY"]}/blob/#{sha}/.github/main.workflow",
-            },
-          ],
+    resp = @http.post(
+      "/actions",
+      {
+        provider: ENV["MESSAGE_PROVIDER"],
+        type: "confirm",
+        meta: {
+          channel_id: ENV["SLACK_CHANNEL_ID"],
+          text: @msg_text,
+          confirmation_text: ENV["SLACK_CONFIRMATION_TEXT"] || "Thank you!",
+          twilio_workflow_url: ENV["TWILIO_WORKFLOW_URL"],
+          to: ENV["TWILIO_TO"],
+          from: ENV["TWILIO_FROM"],
         },
-        {
-          color: "warning",
-          fallback: "Confirmation request failed.",
-          callback_id: @callback_id,
-          actions: [
-            {
-              name: "cancel",
-              text: "Cancel Workflow",
-              type: "button",
-            },
-            {
-              name: "confirm",
-              text: "Continue Workflow",
-              style: "danger",
-              type: "button",
-              confirm: {
-                title: "Continue Workflow",
-                text: "Are you sure you want to continue this workflow?",
-                ok_text: "Continue Workflow",
-                dismiss_text: "Do Not Continue Workflow",
-              },
-            },
-          ],
+        action: {
+          GITHUB_WORKFLOW: ENV["GITHUB_WORKFLOW"],
+          GITHUB_REPOSITORY: ENV["GITHUB_REPOSITORY"],
+          GITHUB_EVENT_NAME: ENV["GITHUB_EVENT_NAME"],
+          GITHUB_SHA: ENV["GITHUB_SHA"].chomp, # For act: https://github.com/nektos/act/issues/31
         },
-      ].to_json,
-    })
+      }.to_json,
+      "content-type" => "application/json",
+    )
 
-    unless JSON.load(resp.body)["ok"]
-      raise "Non-ok response from Slack"
+    print_response("POST /actions", resp)
+
+    unless resp.code == "201"
+      raise "Non-ok response from WorkflowComms"
     end
+
+    body = JSON.load(resp.body)
+    self.action_id = body["id"]
   end
 end
 
