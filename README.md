@@ -1,6 +1,6 @@
-# WorkflowCommms
+# WorkflowComms
 
-WorkflowCommms provides an interface between GitHub Actions and any messaging
+WorkflowComms provides an interface between GitHub Actions and any messaging
 platform.
 
 ## Overview
