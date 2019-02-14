@@ -53,14 +53,7 @@ defmodule WorkflowComms.Storage do
 
   def handle_call({:put_action, action}, _from, callbacks) do
     Logger.debug("Putting action #{inspect(action)}")
-
-    action =
-      if action.id do
-        action
-      else
-        Map.put(action, :id, gen_action_id())
-      end
-
+    action = Action.set_id(action)
     {:reply, {:ok, action}, Map.put(callbacks, action.id, action)}
   end
 
@@ -76,9 +69,5 @@ defmodule WorkflowComms.Storage do
 
   def handle_call(:reset_state, _from, _state) do
     {:reply, :ok, @init_state}
-  end
-
-  defp gen_action_id do
-    Base62UUID.generate()
   end
 end
