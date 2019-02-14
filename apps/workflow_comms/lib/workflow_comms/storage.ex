@@ -79,7 +79,6 @@ defmodule WorkflowComms.Storage do
   end
 
   defp gen_action_id do
-    :crypto.strong_rand_bytes(32)
-    |> Base.encode16()
+    Base62UUID.generate()
   end
 end
