@@ -126,7 +126,7 @@ defmodule WorkflowComms.MessageProvider.Slack do
         :ok
 
       {:error, error} ->
-        Logger.error("Failed Slack API request: #{inspect(error)}")
+        Logger.warn("Failed Slack API request: #{inspect(error)}")
         {:error, error}
     end
   end

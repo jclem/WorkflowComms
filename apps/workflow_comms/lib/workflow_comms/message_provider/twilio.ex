@@ -1,7 +1,7 @@
 defmodule WorkflowComms.MessageProvider.Twilio do
   use WorkflowComms.MessageProvider
 
-  alias WorkflowComms.Action
+  alias WorkflowComms.{Action, TwilioAPI}
 
   @impl WorkflowComms.MessageProvider
   def handle_callback(action, callback) do
@@ -13,21 +13,19 @@ defmodule WorkflowComms.MessageProvider.Twilio do
 
   @impl WorkflowComms.MessageProvider
   def handle_action(action = %Action{type: "confirm"}) do
-    HTTPoison.post!(
+    TwilioAPI.post(
       action.meta["twilio_workflow_url"],
-      URI.encode_query(
+      %{
         To: action.meta["to"],
         From: action.meta["from"],
-        Parameters: Poison.encode!(%{callback_id: action.id})
-      ),
-      [{"content-type", "application/x-www-form-urlencoded"}],
-      hackney: [
-        basic_auth:
-          {Env.get!(:workflow_comms, :twilio_sid), Env.get!(:workflow_comms, :twilio_token)}
-      ]
+        Parameters: %{callback_id: action.id}
+      }
     )
-
-    :ok
+    |> case do
+      {:ok, %HTTPoison.Response{status_code: 200}} -> :ok
+      {:ok, %HTTPoison.Response{}} -> {:error, :non_200_response}
+      {:error, error} -> {:error, error}
+    end
   end
 
   def handle(_action), do: {:error, :no_handler}
